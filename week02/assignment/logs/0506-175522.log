@@ -1,0 +1,11 @@
+17:55:22| Starting to retrieve data from the server
+17:55:29| -----------------------------------------------
+17:55:29| Title   : Revenge of the Sith
+17:55:29| Director: George Lucas
+17:55:29| Producer: Rick McCallum
+17:55:29| Released: 2005-05-19
+17:55:29| 
+17:55:29| Characters: 34
+17:55:29| ['Luke Skywalker', 'C-3PO', 'R2-D2', 'Darth Vader', 'Leia Organa', 'Owen Lars', 'Beru Whitesun lars', 'Obi-Wan Kenobi', 'Anakin Skywalker', 'Wilhuff Tarkin', 'Chewbacca', 'Yoda', 'Palpatine', 'Nute Gunray', 'Padmé Amidala', 'Ayla Secura', 'Mace Windu', 'Ki-Adi-Mundi', 'Kit Fisto', 'Eeth Koth', 'Adi Gallia', 'Saesee Tiin', 'Plo Koon', 'Poggle the Lesser', 'Luminara Unduli', 'Dooku', 'Bail Prestor Organa', 'R4-P17', 'Shaak Ti', 'Grievous', 'Tarfful', 'Raymus Antilles', 'Sly Moore', 'Tion Medon']
+17:55:29| Total Time To complete = 7.10108850
+17:55:29| There were 94 calls to the server
