@@ -12,12 +12,19 @@ import threading
 import random
 import string
 import os
+import mmap
 
 # -----------------------------------------------------------------------------
 def reverse_file(filename):
     """ Display a file in reverse order using a mmap file. """
     # TODO add code here
-    pass
+    with open(filename) as file:
+        with mmap.mmap(file.fileno(), length=0, access=mmap.ACCESS_READ) as map_file:
+            for i in range(map_file.size()):
+                if i != 0:
+                    print(chr(map_file[-i]), end='')
+            print(chr(map_file[0]), end='')
+
 
 
 # -----------------------------------------------------------------------------
@@ -30,7 +37,17 @@ def promote_letter_a(filename):
     You are not creating a different file.  Change the file using mmap file.
     """
     # TODO add code here
-    pass
+    with open(filename, mode="w", encoding="utf8") as file_obj:
+        with mmap.mmap(file_obj.fileno(), length=0, access=mmap.ACCESS_WRITE) as mmap_obj:
+            for i in range(mmap_obj.size()):
+                if mmap_obj[i] == 97:
+                    mmap_obj[i] = ord('A')
+                    # print(chr(mmap_obj[i]), end='')
+                else:
+                    mmap_obj[i] = ord('.')
+                    # print(chr(mmap_obj[i]), end='')
+
+
 
 
 # -----------------------------------------------------------------------------

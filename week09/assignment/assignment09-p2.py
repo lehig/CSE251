@@ -26,7 +26,7 @@ Why would it work?
 
 """
 import math
-import threading 
+import threading
 from screen import Screen
 from maze import Maze
 import sys
@@ -38,22 +38,22 @@ from cse251 import *
 SCREEN_SIZE = 700
 COLOR = (0, 0, 255)
 COLORS = (
-    (0,0,255),
-    (0,255,0),
-    (255,0,0),
-    (255,255,0),
-    (0,255,255),
-    (255,0,255),
-    (128,0,0),
-    (128,128,0),
-    (0,128,0),
-    (128,0,128),
-    (0,128,128),
-    (0,0,128),
-    (72,61,139),
-    (143,143,188),
-    (226,138,43),
-    (128,114,250)
+    (0, 0, 255),
+    (0, 255, 0),
+    (255, 0, 0),
+    (255, 255, 0),
+    (0, 255, 255),
+    (255, 0, 255),
+    (128, 0, 0),
+    (128, 128, 0),
+    (0, 128, 0),
+    (128, 0, 128),
+    (0, 128, 128),
+    (0, 0, 128),
+    (72, 61, 139),
+    (143, 143, 188),
+    (226, 138, 43),
+    (128, 114, 250)
 )
 SLOW_SPEED = 100
 FAST_SPEED = 0
@@ -64,6 +64,7 @@ thread_count = 0
 stop = False
 speed = SLOW_SPEED
 
+
 def get_color():
     """ Returns a different color when called """
     global current_color_index
@@ -73,14 +74,55 @@ def get_color():
     current_color_index += 1
     return color
 
-def solve_find_end(maze):
+
+def solve_find_end(maze:Maze, row, col, path:list, lock:threading.Lock, color=None, threads: list = None):
     """ finds the end position using threads.  Nothing is returned """
     # When one of the threads finds the end position, stop all of them
     global stop
     stop = False
+    maze.move(row, col, color)
+
+    if threads is None:
+        threads = []
+
+    if color is None:
+        color = get_color()
+
+    while not stop:
+        # lock.acquire()
+        if maze.at_end(row, col):
+            stop = True
+            for thread in threads:
+                thread.join()
+            return row, col
+            break
+        possibles = maze.get_possible_moves(row, col)
+        # possibles.sort()
+        if len(possibles) > 1:
+            row = possibles[0][0]
+            col = possibles[0][1]
+            solve_find_end(maze, row, col, path, lock, color, threads)
+
+            for i in range(1, len(possibles)):
+                row = possibles[i][0]
+                col = possibles[i][1]
+                thread = threading.Thread(target=solve_find_end, args=(maze, row, col, path, lock, None, threads))
+                threads.append(thread)
+                thread.start()
+
+        if len(possibles) == 1:
+            row = possibles[0][0]
+            col = possibles[0][1]
+            solve_find_end(maze, row, col, path, lock, color, threads)
+
+        if len(possibles) == 0:
+            return
+            break
+
+        # lock.release()
 
 
-    pass
+
 
 
 def find_end(log, filename, delay):
@@ -94,15 +136,18 @@ def find_end(log, filename, delay):
     screen.background((255, 255, 0))
 
     maze = Maze(screen, SCREEN_SIZE, SCREEN_SIZE, filename, delay=delay)
+    start_row, start_col = maze.get_start_pos()
+    lock = threading.Lock()
+    path = []
 
-    solve_find_end(maze)
+    solve_find_end(maze, start_row, start_col, path, lock)
 
     log.write(f'Number of drawing commands = {screen.get_command_count()}')
     log.write(f'Number of threads created  = {thread_count}')
 
     done = False
     while not done:
-        if screen.play_commands(speed): 
+        if screen.play_commands(speed):
             key = cv2.waitKey(0)
             if key == ord('1'):
                 speed = SLOW_SPEED
@@ -114,7 +159,6 @@ def find_end(log, filename, delay):
                 done = True
         else:
             done = True
-
 
 
 def find_ends(log):
@@ -145,7 +189,6 @@ def main():
     sys.setrecursionlimit(5000)
     log = Log(show_terminal=True)
     find_ends(log)
-
 
 
 if __name__ == "__main__":

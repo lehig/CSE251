@@ -12,6 +12,9 @@ Instructions:
 
 """
 import math
+import random
+import threading
+
 from screen import Screen
 from maze import Maze
 import cv2
@@ -26,14 +29,37 @@ SLOW_SPEED = 100
 FAST_SPEED = 1
 speed = SLOW_SPEED
 
+
 # TODO add any functions
+
+
+def solve_maze(maze, path, row, col):
+    maze.move(row, col, COLOR)
+    path.append((row, col))
+
+    if maze.at_end(row, col):
+        return True
+
+    possibles = maze.get_possible_moves(row, col)
+    possibles.sort()
+    for possible in possibles:
+        if solve_maze(maze, path, possible[0], possible[1]):
+            return True
+
+    path.pop()
+    maze.restore(row, col)
+    return False
+
 
 def solve_path(maze):
     """ Solve the maze and return the path found between the start and end positions.  
         The path is a list of positions, (x, y) """
-        
-    # TODO start add code here
     path = []
+    copy_of_path = path[:]  # copying of the path in c-sharp it is [..]
+
+    # TODO start add code here
+    (start_col, start_row) = maze.get_start_pos()
+    solve_maze(maze, path, start_row, start_col)
     return path
 
 
@@ -47,14 +73,14 @@ def get_path(log, filename):
     screen.background((255, 255, 0))
 
     maze = Maze(screen, SCREEN_SIZE, SCREEN_SIZE, filename)
-
+    # print(maze.can_move_here(1, 0))
     path = solve_path(maze)
 
     log.write(f'Number of drawing commands for = {screen.get_command_count()}')
 
     done = False
     while not done:
-        if screen.play_commands(speed): 
+        if screen.play_commands(speed):
             key = cv2.waitKey(0)
             if key == ord('1'):
                 speed = SLOW_SPEED
@@ -73,9 +99,9 @@ def get_path(log, filename):
 def find_paths(log):
     """ Do not change this function """
 
-    files = ('verysmall.bmp', 'verysmall-loops.bmp', 
-            'small.bmp', 'small-loops.bmp', 
-            'small-odd.bmp', 'small-open.bmp', 'large.bmp', 'large-loops.bmp')
+    files = ('verysmall.bmp', 'verysmall-loops.bmp',
+             'small.bmp', 'small-loops.bmp',
+             'small-odd.bmp', 'small-open.bmp', 'large.bmp', 'large-loops.bmp')
 
     log.write('*' * 40)
     log.write('Part 1')

@@ -1,0 +1,78 @@
+13:05:41| finished reading file
+13:05:42| URL: http://127.0.0.1:8790/people/5
+13:05:42| URL: http://127.0.0.1:8790/people/52
+13:05:42| Retrieved: Leia Organa
+13:05:42| URL: http://127.0.0.1:8790/people/30
+13:05:42| Retrieved: Ki-Adi-Mundi
+13:05:42| URL: http://127.0.0.1:8790/people/8
+13:05:42| URL: http://127.0.0.1:8790/people/78
+13:05:42| Retrieved: Wicket Systri Warrick
+13:05:42| URL: http://127.0.0.1:8790/people/3
+13:05:42| URL: http://127.0.0.1:8790/people/35
+13:05:42| URL: http://127.0.0.1:8790/people/18
+13:05:42| URL: http://127.0.0.1:8790/people/79
+13:05:42| Retrieved: R5-D4
+13:05:42| URL: http://127.0.0.1:8790/people/53
+13:05:42| Retrieved: Shaak Ti
+13:05:42| Retrieved: R2-D2
+13:05:42| Retrieved: Padmé Amidala
+13:05:42| Retrieved: Wedge Antilles
+13:05:42| Retrieved: Grievous
+13:05:42| Retrieved: Kit Fisto
+13:05:43| URL: http://127.0.0.1:8790/people/82
+13:05:43| Retrieved: Sly Moore
+13:05:43| URL: http://127.0.0.1:8790/people/63
+13:05:43| Retrieved: Poggle the Lesser
+13:05:43| URL: http://127.0.0.1:8790/people/46
+13:05:43| Retrieved: Ayla Secura
+13:05:43| URL: http://127.0.0.1:8790/people/51
+13:05:43| URL: http://127.0.0.1:8790/people/55
+13:05:43| Retrieved: Mace Windu
+13:05:43| Retrieved: Adi Gallia
+13:05:43| URL: http://127.0.0.1:8790/people/56
+13:05:43| URL: http://127.0.0.1:8790/people/80
+13:05:43| Retrieved: Saesee Tiin
+13:05:43| Retrieved: Tarfful
+13:05:43| URL: http://127.0.0.1:8790/people/54
+13:05:43| Retrieved: Eeth Koth
+13:05:43| URL: http://127.0.0.1:8790/people/75
+13:05:43| Retrieved: R4-P17
+13:05:43| URL: http://127.0.0.1:8790/people/4
+13:05:43| Retrieved: Darth Vader
+13:05:44| URL: http://127.0.0.1:8790/people/21
+13:05:44| Retrieved: Palpatine
+13:05:44| URL: http://127.0.0.1:8790/people/76
+13:05:44| Retrieved: Wat Tambor
+13:05:44| URL: http://127.0.0.1:8790/people/1
+13:05:44| Retrieved: Luke Skywalker
+13:05:44| URL: http://127.0.0.1:8790/people/12
+13:05:44| URL: http://127.0.0.1:8790/people/83
+13:05:44| Retrieved: Wilhuff Tarkin
+13:05:44| Retrieved: Tion Medon
+13:05:44| URL: http://127.0.0.1:8790/people/64
+13:05:44| Retrieved: Luminara Unduli
+13:05:44| URL: http://127.0.0.1:8790/people/67
+13:05:44| Retrieved: Dooku
+13:05:44| URL: http://127.0.0.1:8790/people/13
+13:05:44| URL: http://127.0.0.1:8790/people/81
+13:05:44| Retrieved: Chewbacca
+13:05:44| Retrieved: Raymus Antilles
+13:05:44| URL: http://127.0.0.1:8790/people/7
+13:05:44| Retrieved: Beru Whitesun lars
+13:05:45| URL: http://127.0.0.1:8790/people/6
+13:05:45| URL: http://127.0.0.1:8790/people/20
+13:05:45| URL: http://127.0.0.1:8790/people/2
+13:05:45| Retrieved: Owen Lars
+13:05:45| Retrieved: Yoda
+13:05:45| Retrieved: C-3PO
+13:05:45| URL: http://127.0.0.1:8790/people/33
+13:05:45| URL: http://127.0.0.1:8790/people/11
+13:05:45| Retrieved: Nute Gunray
+13:05:45| Retrieved: Anakin Skywalker
+13:05:45| URL: http://127.0.0.1:8790/people/68
+13:05:45| URL: http://127.0.0.1:8790/people/58
+13:05:45| Retrieved: Bail Prestor Organa
+13:05:45| Retrieved: Plo Koon
+13:05:45| URL: http://127.0.0.1:8790/people/10
+13:05:45| Retrieved: Obi-Wan Kenobi
+13:05:45| Time to process all URLS = 4.11275290

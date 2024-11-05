@@ -22,31 +22,46 @@ import json
 # Include cse 251 common Python files
 from cse251 import *
 
-RETRIEVE_THREADS = 4        # Number of retrieve_threads
+RETRIEVE_THREADS = 40  # Number of retrieve_threads
 NO_MORE_VALUES = 'No more'  # Special value to indicate no more items in the queue
 
-def retrieve_thread():  # TODO add arguments
+
+def retrieve_thread(q: queue, log):
     """ Process values from the data_queue """
 
     while True:
-        # TODO check to see if anything is in the queue
+        url = q.get()
+        if url == 'No more':
+            break
 
-        # TODO process the value retrieved from the queue
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                data = response.json()
+                name = data['name']
+                log.write(f'Retrieved: {name}')
+            else:
+                log.write(f"Error retrieving {url}: Status code {response.status_code}")
 
-        # TODO make Internet call to get characters name and log it
-        pass
+        except requests.RequestException as e:
+            log.write(f"Request exception for {url}: {e}")
+        finally:
+            q.task_done()
+
+    q.task_done()
 
 
-
-def file_reader(): # TODO add arguments
+def file_reader(file: str, q: queue, log: Log):
     """ This thread reading the data file and places the values in the data_queue """
 
-    # TODO Open the data file "urls.txt" and place items into a queue
-
+    with open(file, 'r') as file:
+        for line in file:
+            url = line.strip()
+            q.put(url)
     log.write('finished reading file')
 
-    # TODO signal the retrieve threads one more time that there are "no more values"
-
+    for _ in range(RETRIEVE_THREADS):
+        q.put(NO_MORE_VALUES)
 
 
 def main():
@@ -54,24 +69,26 @@ def main():
 
     log = Log(show_terminal=True)
 
-    # TODO create queue
-    # TODO create semaphore (if needed)
+    # creating a queue
+    q = queue.Queue()
 
-    # TODO create the threads. 1 filereader() and RETRIEVE_THREADS retrieve_thread()s
     # Pass any arguments to these thread need to do their job
+    file_reader_thread = threading.Thread(target=file_reader, args=('urls.txt', q, log))
+    retrieve_threads = [threading.Thread(target=retrieve_thread, args=(q, log)) for _ in range(RETRIEVE_THREADS)]
 
     log.start_timer()
 
-    # TODO Get them going - start the retrieve_threads first, then file_reader
+    for t in retrieve_threads:
+        t.start()
 
-    # TODO Wait for them to finish - The order doesn't matter
+    file_reader_thread.start()
+
+    file_reader_thread.join()
+
+    q.join()
 
     log.stop_timer('Time to process all URLS')
 
 
 if __name__ == '__main__':
     main()
-
-
-
-

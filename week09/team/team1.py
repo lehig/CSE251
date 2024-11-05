@@ -52,17 +52,54 @@ Instructions:
 
 import time
 import threading
+import random
 
 PHILOSOPHERS = 5
 MAX_MEALS_EATEN = PHILOSOPHERS * 5
 
+
+def pause():
+    num = random.randrange(1, 3)
+    time.sleep(num)
+
+
+def eat(phil_num, forks, count):
+    while True:
+        if count == 5:
+            print(f'{phil_num} Done!')
+            print(f'{phil_num} ate {count} times.')
+            break
+        pause()
+        forks[phil_num % 5].acquire()
+        forks[(phil_num % 5) - 1].acquire()
+        # print(f'{phil_num} eating')
+
+        pause()
+        # print(f'{phil_num} thinking')
+        forks[phil_num % 5].release()
+        forks[(phil_num % 5) - 1].release()
+        count += 1
+
+
 def main():
+    times_eaten = 0
+
     # TODO - create the forks
+    forks = [threading.Lock() for _ in range(5)]
+
     # TODO - create PHILOSOPHERS philosophers
+
     # TODO - Start them eating and thinking
+    philosophers = [threading.Thread(target=eat, args=(i, forks, times_eaten)) for i in range(5)]
+
+    for philosopher in philosophers:
+        philosopher.start()
+
+    for philosopher in philosophers:
+        philosopher.join()
+
     # TODO - Display how many times each philosopher ate
 
-    pass
 
 if __name__ == '__main__':
     main()

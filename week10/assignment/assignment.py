@@ -58,6 +58,7 @@ Add any comments for me:
 """
 
 import random
+import threading
 from multiprocessing.managers import SharedMemoryManager
 import multiprocessing as mp
 
@@ -65,8 +66,71 @@ BUFFER_SIZE = 10
 READERS = 2
 WRITERS = 2
 
-def main():
 
+# def read_func(data: SharedMemoryManager, read_sem: mp.Semaphore, write_sem: mp.Semaphore, items_to_send):
+#     read_sem.acquire()
+#
+
+# def readers_func(data: SharedMemoryManager, read_sem: mp.Semaphore, write_sem: mp.Semaphore, items_to_send):
+#     head = 10
+#     tail = 11
+#     num_to_add = 12
+#     values_processed = 13
+#
+#     while data[values_processed] != items_to_send:
+#         read_sem.acquire()
+#         print(f'{data[data[head]]}', end=', ', flush=True)
+#
+#         # update the tail
+#         data[head] = (data[head] + 1) % 9
+#         data[values_processed] += 1
+#         write_sem.release()
+#
+#
+# def writers_func(data: SharedMemoryManager, read_sem: mp.Semaphore, write_sem: mp.Semaphore, writer_lock: mp.Lock, items_to_send):
+#     head = 10
+#     tail = 11
+#     num_to_add = 12
+#     values_processed = 13
+#
+#     for i in range(items_to_send):
+#         write_sem.acquire()
+#         with writer_lock:
+#             data[num_to_add] = i
+#             data[tail] = data[num_to_add]
+#
+#             # update the head
+#             data[tail] = (data[tail] + 1) % 9
+#         read_sem.release()
+
+
+def reader_func(data: SharedMemoryManager, read_sem: mp.Semaphore, write_sem: mp.Semaphore, items_to_send):
+    for i in range(items_to_send):
+        read_sem.acquire()
+
+        print(f'{data[data[11]]}', end=', ', flush=True)
+        data[13] += 1
+        write_sem.release()
+
+
+def writer_func(data: SharedMemoryManager, read_sem: mp.Semaphore, write_sem: mp.Semaphore, writer_lock: mp.Lock, items_to_send):
+    for i in range(items_to_send):
+        write_sem.acquire()
+        data[12] = i
+        data[data[10]] = data[12]
+
+        # update the head
+        data[10] = (data[10] + 1) % 9
+
+        # update the tail
+        if data[10] == 0:
+            data[11] = 9
+        else:
+            data[11] = data[10] - 1
+        read_sem.release()
+
+
+def main():
     # This is the number of values that the writer will send to the reader
     items_to_send = random.randint(1000, 10000)
 
@@ -83,19 +147,34 @@ def main():
     #        You can add another value to the sharedable list to keep
     #        track of the number of values received by the readers.
     #        (ie., [0] * (BUFFER_SIZE + 4))
+    data = smm.ShareableList([0] * (BUFFER_SIZE + 5))
 
     # TODO - Create any lock(s) or semaphore(s) that you feel you need
+    reader_semaphore = mp.Semaphore(0)
+    writer_semaphore = mp.Semaphore(2)
+    writer_lock = mp.Lock()
 
     # TODO - create reader and writer processes
+    readers = [mp.Process(target=reader_func, args=(data, reader_semaphore, writer_semaphore, items_to_send)) for i in range(READERS)]
+    writers = [mp.Process(target=writer_func, args=(data, reader_semaphore, writer_semaphore, writer_lock, items_to_send)) for i in range(WRITERS)]
 
     # TODO - Start the processes and wait for them to finish
+    for writer in writers:
+        writer.start()
+    for reader in readers:
+        reader.start()
 
-    print(f'{items_to_send} values sent')
+    for writer in writers:
+        writer.join()
+    for reader in readers:
+        reader.join()
+
+    print(f'\n{items_to_send} values sent')
 
     # TODO - Display the number of numbers/items received by the reader.
     #        Can not use "items_to_send", must be a value collected
     #        by the reader processes.
-    # print(f'{<your variable>} values received')
+    print(f'{data[13]} values received')
 
     smm.shutdown()
 

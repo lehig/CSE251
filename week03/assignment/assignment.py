@@ -38,8 +38,11 @@ GREEN = 1
 BLUE  = 2
 
 
-def create_new_frame(image_file, green_file, process_file):
+def create_new_frame(image_number: int):
     """ Creates a new image file from image_file and green_file """
+    image_file = rf'elephant/image{image_number:03d}.png'
+    green_file = rf'green/image{image_number:03d}.png'
+    process_file = rf'processed/image{image_number:03d}.png'
 
     # this print() statement is there to help see which frame is being processed
     print(f'{process_file[-7:-4]}', end=',', flush=True)
@@ -76,19 +79,30 @@ if __name__ == '__main__':
 
     # TODO Process all frames trying 1 cpu, then 2, then 3, ... to CPU_COUNT
     #      add results to xaxis_cpus and yaxis_times
+    for i in range(1, CPU_COUNT+1):
+        start_time = timeit.default_timer()
+        with mp.Pool(i) as p:
+            p.map(create_new_frame, range(1, 301))
+        time = timeit.default_timer() - start_time
+        print(f'\n{i} CPU done.')
+        print(f'\nTime To Process all images = {time}')
+        xaxis_cpus.append(i)
+        yaxis_times.append(time)
+
+
 
 
     # sample code: remove before submitting  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # process one frame #10
-    image_number = 10
-
-    image_file = rf'elephant/image{image_number:03d}.png'
-    green_file = rf'green/image{image_number:03d}.png'
-    process_file = rf'processed/image{image_number:03d}.png'
-
-    start_time = timeit.default_timer()
-    create_new_frame(image_file, green_file, process_file)
-    print(f'\nTime To Process all images = {timeit.default_timer() - start_time}')
+    # image_number = 1
+    #
+    # image_file = rf'elephant/image{image_number:03d}.png'
+    # green_file = rf'green/image{image_number:03d}.png'
+    # process_file = rf'processed/image{image_number:03d}.png'
+    #
+    # start_time = timeit.default_timer()
+    # create_new_frame(image_number)
+    # print(f'\nTime To Process all images = {timeit.default_timer() - start_time}')
     # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
